@@ -41,7 +41,7 @@
 1. **克隆或下载本仓库**：
 
    ```bash
-   git clone https://github.com/your_username/your_repository.git
+   git clone https://github.com/Stella-sea/steamworkshopMOD-get.git
    ```
 
 2. **运行 `setup.py` 脚本**：
@@ -52,6 +52,8 @@
 
    - **首次运行**：脚本将自动检测 Python 版本、创建虚拟环境、安装依赖并运行程序。
    - **后续运行**：脚本将直接运行程序，无需重复安装。
+
+**注**：可直接下载release的压缩包，运行setup.exe--仅在win下可用
 
 ## 使用说明
 
