@@ -1,7 +1,8 @@
 # Steam_Workshop_MOD-get
 
 一款用于批量下载 Steam 创意工坊 MOD 的简洁易用的工具，支持多种下载方式，自动处理依赖，无需手动配置环境。
-注：目前仅有单一下载渠道--steamCMD匿名账户登录下载，所以只能下载部分开放式创意工坊mod，但默认会给你的电脑带来steamCMD，愿意学习使用的可以通过steamCMD登录自己的账号来下载自己已入库的游戏MOD！！！
+
+注：目前仅有单一下载渠道--steamCMD匿名账户登录下载，所以只能下载部分开放式创意工坊mod，但通过设置登录自己的账号来下载自己已入库的游戏MOD
 
 ## 功能特性
 
@@ -53,7 +54,7 @@
    - **首次运行**：脚本将自动检测 Python 版本、创建虚拟环境、安装依赖并运行程序。
    - **后续运行**：脚本将直接运行程序，无需重复安装。
 
-**注**：可直接下载release的压缩包，运行setup.exe--仅在win下可用
+**注**：可直接下载release的压缩包，运行SteamWorkshop-MOD-get.exe--仅在win下可用
 
 ## 使用说明
 
@@ -114,7 +115,7 @@
 2. **创建特性分支**：
 
    ```bash
-   git checkout -b feature/your_feature
+   git checkout -b Stella-sea/steamworkshopMOD-get
    ```
 
 3. **提交更改**：
@@ -126,7 +127,7 @@
 4. **推送到分支**：
 
    ```bash
-   git push origin feature/your_feature
+   git push origin Stella-sea/steamworkshopMOD-get
    ```
 
 5. **创建 Pull Request**
