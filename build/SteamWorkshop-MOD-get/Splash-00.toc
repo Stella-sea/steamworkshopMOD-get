@@ -1,0 +1,278 @@
+('D:\\PyCharm 2024.2\\Object\\steamworkshopDL\\steamworkshopDL\\start.png',
+ 'D:\\PyCharm '
+ '2024.2\\Object\\steamworkshopDL\\steamworkshopDL\\build\\SteamWorkshop-MOD-get\\Splash-00.res',
+ 'D:\\PyCharm '
+ '2024.2\\Object\\steamworkshopDL\\steamworkshopDL\\build\\SteamWorkshop-MOD-get\\Splash-00_script.tcl',
+ None,
+ 12,
+ 'TkDefaultFont',
+ 'black',
+ 'Initializing',
+ True,
+ False,
+ True,
+ (760, 480),
+ False,
+ 'proc _ipc_server {channel clientaddr clientport} {\n'
+ 'set client_name [format <%s:%d> $clientaddr $clientport]\n'
+ 'chan configure $channel \\\n'
+ '-buffering none \\\n'
+ '-encoding utf-8 \\\n'
+ '-eofchar \\x04 \\\n'
+ '-translation cr\n'
+ 'chan event $channel readable [list _ipc_caller $channel $client_name]\n'
+ '}\n'
+ 'proc _ipc_caller {channel client_name} {\n'
+ 'chan gets $channel cmd\n'
+ 'if {[chan eof $channel]} {\n'
+ 'chan close $channel\n'
+ 'exit\n'
+ '} elseif {![chan blocked $channel]} {\n'
+ 'if {[string match "update_text*" $cmd]} {\n'
+ 'global status_text\n'
+ 'set first [expr {[string first "(" $cmd] + 1}]\n'
+ 'set last [expr {[string last ")" $cmd] - 1}]\n'
+ 'set status_text [string range $cmd $first $last]\n'
+ '}\n'
+ '}\n'
+ '}\n'
+ 'set server_socket [socket -server _ipc_server -myaddr localhost 0]\n'
+ 'set server_port [fconfigure $server_socket -sockname]\n'
+ 'set env(_PYI_SPLASH_IPC) [lindex $server_port 2]\n'
+ 'image create photo splash_image\n'
+ 'splash_image put $_image_data\n'
+ 'unset _image_data\n'
+ 'proc canvas_text_update {canvas tag _var - -} {\n'
+ 'upvar $_var var\n'
+ '$canvas itemconfigure $tag -text $var\n'
+ '}\n'
+ 'package require Tk\n'
+ 'set image_width [image width splash_image]\n'
+ 'set image_height [image height splash_image]\n'
+ 'set display_width [winfo screenwidth .]\n'
+ 'set display_height [winfo screenheight .]\n'
+ 'set x_position [expr {int(0.5*($display_width - $image_width))}]\n'
+ 'set y_position [expr {int(0.5*($display_height - $image_height))}]\n'
+ 'frame .root\n'
+ 'canvas .root.canvas \\\n'
+ '-width $image_width \\\n'
+ '-height $image_height \\\n'
+ '-borderwidth 0 \\\n'
+ '-highlightthickness 0\n'
+ '.root.canvas create image \\\n'
+ '[expr {$image_width / 2}] \\\n'
+ '[expr {$image_height / 2}] \\\n'
+ '-image splash_image\n'
+ 'wm attributes . -transparentcolor magenta\n'
+ '.root.canvas configure -background magenta\n'
+ 'pack .root\n'
+ 'grid .root.canvas -column 0 -row 0 -columnspan 1 -rowspan 2\n'
+ 'wm overrideredirect . 1\n'
+ 'wm geometry . +${x_position}+${y_position}\n'
+ 'wm attributes . -topmost 1\n'
+ 'raise .',
+ 'D:\\Python\\DLLs\\tcl86t.dll',
+ 'D:\\Python\\DLLs\\tk86t.dll',
+ {'VCRUNTIME140.dll',
+  '_tk_data\\license.terms',
+  '_tk_data\\text.tcl',
+  '_tk_data\\tk.tcl',
+  '_tk_data\\ttk\\cursors.tcl',
+  '_tk_data\\ttk\\fonts.tcl',
+  '_tk_data\\ttk\\ttk.tcl',
+  '_tk_data\\ttk\\utils.tcl',
+  'api-ms-win-core-console-l1-1-0.dll',
+  'api-ms-win-core-datetime-l1-1-0.dll',
+  'api-ms-win-core-debug-l1-1-0.dll',
+  'api-ms-win-core-errorhandling-l1-1-0.dll',
+  'api-ms-win-core-file-l1-1-0.dll',
+  'api-ms-win-core-file-l1-2-0.dll',
+  'api-ms-win-core-file-l2-1-0.dll',
+  'api-ms-win-core-handle-l1-1-0.dll',
+  'api-ms-win-core-heap-l1-1-0.dll',
+  'api-ms-win-core-interlocked-l1-1-0.dll',
+  'api-ms-win-core-libraryloader-l1-1-0.dll',
+  'api-ms-win-core-localization-l1-2-0.dll',
+  'api-ms-win-core-memory-l1-1-0.dll',
+  'api-ms-win-core-namedpipe-l1-1-0.dll',
+  'api-ms-win-core-processenvironment-l1-1-0.dll',
+  'api-ms-win-core-processthreads-l1-1-0.dll',
+  'api-ms-win-core-processthreads-l1-1-1.dll',
+  'api-ms-win-core-profile-l1-1-0.dll',
+  'api-ms-win-core-rtlsupport-l1-1-0.dll',
+  'api-ms-win-core-string-l1-1-0.dll',
+  'api-ms-win-core-synch-l1-1-0.dll',
+  'api-ms-win-core-synch-l1-2-0.dll',
+  'api-ms-win-core-sysinfo-l1-1-0.dll',
+  'api-ms-win-core-timezone-l1-1-0.dll',
+  'api-ms-win-core-util-l1-1-0.dll',
+  'api-ms-win-crt-convert-l1-1-0.dll',
+  'api-ms-win-crt-environment-l1-1-0.dll',
+  'api-ms-win-crt-heap-l1-1-0.dll',
+  'api-ms-win-crt-math-l1-1-0.dll',
+  'api-ms-win-crt-runtime-l1-1-0.dll',
+  'api-ms-win-crt-stdio-l1-1-0.dll',
+  'api-ms-win-crt-string-l1-1-0.dll',
+  'api-ms-win-crt-time-l1-1-0.dll',
+  'api-ms-win-crt-utility-l1-1-0.dll',
+  'tcl86t.dll',
+  'tk86t.dll',
+  'ucrtbase.dll',
+  'zlib1.dll'},
+ [('tcl86t.dll', 'D:\\Python\\DLLs\\tcl86t.dll', 'BINARY'),
+  ('tk86t.dll', 'D:\\Python\\DLLs\\tk86t.dll', 'BINARY'),
+  ('api-ms-win-crt-string-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-string-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-stdio-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-stdio-l1-1-0.dll',
+   'BINARY'),
+  ('zlib1.dll', 'D:\\Python\\DLLs\\zlib1.dll', 'BINARY'),
+  ('api-ms-win-crt-utility-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-utility-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-runtime-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-runtime-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-math-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-math-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-time-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-time-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-heap-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-heap-l1-1-0.dll',
+   'BINARY'),
+  ('VCRUNTIME140.dll', 'D:\\Python\\VCRUNTIME140.dll', 'BINARY'),
+  ('api-ms-win-crt-environment-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-environment-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-crt-convert-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-crt-convert-l1-1-0.dll',
+   'BINARY'),
+  ('ucrtbase.dll',
+   'D:\\Windows Kits\\10\\Windows Performance Toolkit\\ucrtbase.dll',
+   'BINARY'),
+  ('api-ms-win-core-processthreads-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-processthreads-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-2-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-synch-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-errorhandling-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-errorhandling-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-file-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-timezone-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-timezone-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-memory-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-memory-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-profile-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-profile-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-sysinfo-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-sysinfo-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-string-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-string-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-synch-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-synch-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-console-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-console-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-interlocked-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-interlocked-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processenvironment-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-processenvironment-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-namedpipe-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-namedpipe-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l1-2-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-file-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-util-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-util-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-debug-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-debug-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-processthreads-l1-1-1.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-processthreads-l1-1-1.dll',
+   'BINARY'),
+  ('api-ms-win-core-heap-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-heap-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-file-l2-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-file-l2-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-libraryloader-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-libraryloader-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-handle-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-handle-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-datetime-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-datetime-l1-1-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-localization-l1-2-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-localization-l1-2-0.dll',
+   'BINARY'),
+  ('api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'D:\\Windows Kits\\10\\Windows Performance '
+   'Toolkit\\api-ms-win-core-rtlsupport-l1-1-0.dll',
+   'BINARY'),
+  ('_tk_data\\license.terms', 'D:\\Python\\tcl\\tk8.6\\license.terms', 'DATA'),
+  ('_tk_data\\text.tcl', 'D:\\Python\\tcl\\tk8.6\\text.tcl', 'DATA'),
+  ('_tk_data\\tk.tcl', 'D:\\Python\\tcl\\tk8.6\\tk.tcl', 'DATA'),
+  ('_tk_data\\ttk\\cursors.tcl',
+   'D:\\Python\\tcl\\tk8.6\\ttk\\cursors.tcl',
+   'DATA'),
+  ('_tk_data\\ttk\\fonts.tcl',
+   'D:\\Python\\tcl\\tk8.6\\ttk\\fonts.tcl',
+   'DATA'),
+  ('_tk_data\\ttk\\ttk.tcl', 'D:\\Python\\tcl\\tk8.6\\ttk\\ttk.tcl', 'DATA'),
+  ('_tk_data\\ttk\\utils.tcl',
+   'D:\\Python\\tcl\\tk8.6\\ttk\\utils.tcl',
+   'DATA')],
+ 'D:\\Python\\DLLs\\_tkinter.pyd')
