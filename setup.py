@@ -21,7 +21,7 @@ def find_python310():
     """
     possible_names = ['python3.10', 'python3', 'python']
     if platform.system() == 'Windows':
-        possible_names.extend(['py -3.10', 'py -3'])
+        possible_names.extend(['py', 'python'])
     for name in possible_names:
         try:
             if ' ' in name:
@@ -44,8 +44,10 @@ def download_and_install_python():
     """
     提示用户安装 Python 3.10+
     """
-    print('需要 Python 3.10 或更高版本，请先安装后再运行此脚本。')
-    input('按回车键退出...')
+    print('需要 Python 3.10 或更高版本。')
+    print('请前往以下链接下载并安装 Python 3.10 或更高版本：')
+    print('https://www.python.org/downloads/')
+    input('安装完成后，请重新运行此脚本。按回车键退出...')
     sys.exit(1)
 
 def parse_requirements_from_main():
@@ -59,12 +61,13 @@ def parse_requirements_from_main():
     import_statements = re.findall(r'^\s*(?:import|from)\s+([^\s]+)', content, re.MULTILINE)
     for statement in import_statements:
         module = statement.split('.')[0]
-        if module not in sys.builtin_module_names and module not in standard_lib_modules:
+        if module not in sys.builtin_module_names and module not in standard_lib_modules and module != '__future__':
             requirements.add(module)
     return list(requirements)
 
 # 常见的标准库模块列表
 standard_lib_modules = {
+    # ...（保持不变）
     'abc', 'aifc', 'argparse', 'array', 'ast', 'asynchat', 'asyncio', 'asyncore', 'atexit',
     'audioop', 'base64', 'binascii', 'binhex', 'bisect', 'builtins', 'bz2', 'calendar', 'cgi',
     'cgitb', 'chunk', 'cmath', 'cmd', 'code', 'codecs', 'codeop', 'collections', 'colorsys',
@@ -98,39 +101,29 @@ def create_virtualenv(python_executable):
         subprocess.check_call([python_executable, '-m', 'venv', venv_dir])
     return get_venv_python()
 
-def get_venv_python():
+def get_venv_python(use_pythonw=False):
     """
     获取虚拟环境中 Python 可执行文件的路径
     """
     venv_dir = '.venv'
     if platform.system() == 'Windows':
-        python_executable = 'python.exe'
+        python_executable = 'pythonw.exe' if use_pythonw else 'python.exe'
         python_path = os.path.join(venv_dir, 'Scripts', python_executable)
     else:
-        python_executable = 'python'
+        python_executable = 'python3' if sys.version_info.major == 3 else 'python'
         python_path = os.path.join(venv_dir, 'bin', python_executable)
     return python_path
 
 def print_progress_bar(iteration, total, prefix='', suffix='', length=50, fill='█'):
     """
     打印进度条到控制台。
-
-    参数:
-    - iteration: 当前的迭代次数 (int)
-    - total: 总的迭代次数 (int)
-    - prefix: 前缀字符串 (str)
-    - suffix: 后缀字符串 (str)
-    - length: 进度条的长度 (int)
-    - fill: 进度条的填充字符 (str)
     """
     percent = f"{100 * (iteration / float(total)):.1f}"
     filled_length = int(length * iteration // total)
     bar = fill * filled_length + '-' * (length - filled_length)
     print(f'\r{prefix} |{bar}| {percent}% {suffix}', end='\r')
-    # 当进度达到总量时，打印新行
     if iteration == total:
         print()
-
 
 def install_requirements(venv_python, requirements):
     """
@@ -157,55 +150,51 @@ def install_requirements(venv_python, requirements):
             subprocess.check_call([venv_python, '-m', 'pip', 'install', req])
     print_progress_bar(total, total, prefix='安装进度:', suffix='完成', length=50)
 
-def run_main(venv_python):
+def run_main():
     """
-    使用虚拟环境中的 Python 运行 main.py，并捕获输出
+    使用虚拟环境中的 Python 运行 main.py
     """
-    result = subprocess.run([venv_python, 'main.py'], capture_output=True, text=True)
-    if result.returncode != 0:
-        print(f"运行 main.py 时出错，退出代码：{result.returncode}")
-        print("标准输出：")
-        print(result.stdout)
-        print("错误输出：")
-        print(result.stderr)
-        sys.exit(result.returncode)
+    venv_python = get_venv_python(use_pythonw=True)
+    try:
+        if platform.system() == 'Windows':
+            # 使用 pythonw.exe 运行 main.py，不显示命令行窗口
+            subprocess.Popen([venv_python, 'main.py'], shell=False)
+        else:
+            # 在类 Unix 系统上，使用 nohup 和 & 运行 main.py，并立即返回
+            subprocess.Popen(f'nohup {venv_python} main.py &', shell=True)
+    except Exception as e:
+        print(f"运行 main.py 时发生异常：{e}")
+        sys.exit(1)
 
 def main():
     if check_setup_complete():
-        # 已完成设置，直接运行 main.py
-        venv_python = get_venv_python()
-        if not os.path.exists(venv_python):
-            print('未找到虚拟环境。请删除 .setup_complete 文件并重新运行此脚本。')
-            sys.exit(1)
-        run_main(venv_python)
-        return
-
-    # 检查 Python 版本
-    python_executable = find_python310()
-    if python_executable is None:
-        download_and_install_python()
-        sys.exit(1)
+        # 已完成设置，直接运行 main.py，然后退出 setup.py
+        run_main()
+        sys.exit(0)
     else:
-        print(f'使用的 Python 可执行文件: {python_executable}')
-
-    # 解析 main.py 中的依赖
-    requirements = parse_requirements_from_main()
-    print('检测到的依赖库:', requirements)
-
-    # 创建虚拟环境
-    venv_python = create_virtualenv(python_executable)
-    print('虚拟环境已创建。')
-
-    # 安装依赖
-    install_requirements(venv_python, requirements)
-    print('依赖库已安装。')
-
-    # 记录设置完成
-    record_setup_complete()
-    print('设置完成。')
-
-    # 运行 main.py
-    run_main(venv_python)
+        # 首次运行，进行设置
+        # 检查 Python 版本
+        python_executable = find_python310()
+        if python_executable is None:
+            download_and_install_python()
+            sys.exit(1)
+        else:
+            print(f'使用的 Python 可执行文件: {python_executable}')
+        # 解析 main.py 中的依赖
+        requirements = parse_requirements_from_main()
+        print('检测到的依赖库:', requirements)
+        # 创建虚拟环境
+        venv_python = create_virtualenv(python_executable)
+        print('虚拟环境已创建。')
+        # 安装依赖
+        install_requirements(venv_python, requirements)
+        print('依赖库已安装。')
+        # 记录设置完成
+        record_setup_complete()
+        print('设置完成。')
+        # 运行 main.py，然后退出 setup.py
+        run_main()
+        sys.exit(0)
 
 if __name__ == '__main__':
     main()
